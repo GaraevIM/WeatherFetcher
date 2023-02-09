@@ -38,6 +38,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def coroutines_version = "1.5.2"
     def gson_version = "2.10.1"
+    def koin_android_version = "3.3.3"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
@@ -60,4 +61,6 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
 
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    // Koin main features for Android
+    implementation "io.insert-koin:koin-android:$koin_android_version"
 }
