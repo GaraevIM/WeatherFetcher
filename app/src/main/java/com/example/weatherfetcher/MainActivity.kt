@@ -1,11 +1,9 @@
 package com.example.weatherfetcher
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherfetcher.feature.weather_screen.WeatherInteractor
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherApiClient
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemoteSource
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
 import com.example.weatherfetcher.feature.weather_screen.ui.WeatherScreenPresenter
