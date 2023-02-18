@@ -1,43 +1,37 @@
 package com.example.weatherfetcher
 
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weatherfetcher.feature.weather_screen.WeatherInteractor
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemoteSource
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
-import com.example.weatherfetcher.feature.weather_screen.ui.WeatherScreenPresenter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.core.view.isVisible
+import com.example.weatherfetcher.feature.weather_screen.ui.UiEvent
+import com.example.weatherfetcher.feature.weather_screen.ui.ViewState
+import com.example.weatherfetcher.feature.weather_screen.ui.WeatherScreenViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var presenter: WeatherScreenPresenter
+    private val viewModel: WeatherScreenViewModel by viewModel()
 
+    private val textViewHello: TextView by lazy {findViewById(R.id.tvHello)}
+    private val fabWeather: FloatingActionButton by lazy {findViewById(R.id.fabWeatherFetch)}
+    private val progressBar: ProgressBar by lazy {findViewById(R.id.progressBar)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = WeatherScreenPresenter(
-            WeatherInteractor(
-                WeatherRepoImpl(
-                    WeatherRemoteSource(WeatherApiClient.getApi())
-                )
-            )
-        )
+        viewModel.viewState.observe(this, ::render)
 
-        var weather = ""
-        val textViewHello = findViewById<TextView>(R.id.tvHello)
-
-        GlobalScope.launch {
-            withContext(Dispatchers.Main) {
-                textViewHello.text = presenter.getWeather()
-            }
+        fabWeather.setOnClickListener{
+            viewModel.processUiEvent(UiEvent.OnButtonClicked)
         }
+    }
 
-
+    private fun render (viewState: ViewState) {
+        progressBar.isVisible = viewState.isLoading
+        textViewHello.text = "${viewState.title} ${viewState.temperature}"
     }
 }
